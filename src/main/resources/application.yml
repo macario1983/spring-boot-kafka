@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:19092
+    consumer:
+      group-id: consumer-group-1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  messages:
+    basename: messages
+    fallback-to-system-locale: false
+    encoding: UTF-8
+  output:
+    ansi:
+      enabled: ALWAYS

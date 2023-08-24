@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  kafka:
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092, EXTERNAL://localhost:19092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT, EXTERNAL:PLAINTEXT
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    hostname: kafka
+    networks:
+      - kafka-network
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "19092:19092"
+    restart: unless-stopped
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+  zookeeper:
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    hostname: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - kafka-network
+    ports:
+      - "22181:22181"
+    restart: unless-stopped
+    volumes:
+      - zookeeper-data:/data
+      - zookeeper-data:/opt/datalog
+
+networks:
+  kafka-network:
+    driver: bridge
+    name: kafka-network
+
+volumes:
+  kafka-data:
+    name: kafka-data
+  zookeeper-data:
+    name: zookeeper-data
