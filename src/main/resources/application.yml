@@ -1,5 +1,13 @@
 server:
-  port: 8081
+  port: 8080
+  tomcat:
+    accept-count: '500'
+    connection-timeout: 2000
+    max-connections: '10000'
+    max-http-post-size: 2MB
+    max-threads: '200'
+    min-spare-threads: '10'
+    max-swallow-size: 2MB
 
 spring:
   kafka:
@@ -9,6 +17,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
     producer:
+      compression-type: gzip
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   messages:
